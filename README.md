@@ -2,9 +2,9 @@
 
 ## Purpose
 
-I wrote this little helper script to assist in creating patterns for use in Frida's Memory Scanning APIs to assist in further script writing. The upsides to generating patterns this way mainly is a time saver, in addition to guaranteeing that our pattern will be correct and typo free. This can save a lot of time with trouble shooting. 
+I wrote this little helper script to assist in creating patterns for use in Frida's Memory Scanning APIs to assist in further script writing. The upsides to generating patterns this way mainly is it's a time saver, in addition to guaranteeing that our pattern will be correct and typo free. This can save a lot of time with trouble shooting. 
 
-A note about this script to be aware of if you choose to use it is that by default I am only doing little endian pattern output. If for some reason you need big endian, you need to change the `			hex_encoding_of_current_instruction = hex(doc.readUInt32LE(current_instruction_address))[2:]
+A note about this script to be aware of if you choose to use it is that by default I am only doing little endian pattern output. If for some reason you need big endian, you need to change the `hex_encoding_of_current_instruction = hex(doc.readUInt32LE(current_instruction_address))[2:]
 ` to use the `readUInt32BE()` function instead. Down the road I might add some functionality to specify this if it comes up more but currently all my use cases are LE focused. 
 
 ## How to "install" to Hopper

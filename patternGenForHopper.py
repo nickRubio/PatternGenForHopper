@@ -3,14 +3,21 @@ doc = Document.getCurrentDocument()
 
 # Get our selection from the assembly view
 instruction_selection_list = doc.getRawSelectedLines()
+sanitized_instruction_list = []
+
+for instruction in instruction_selection_list:
+	if instruction[:16].isspace() or not instruction[:16]:
+		continue
+	else:
+		sanitized_instruction_list.append(instruction)
 
 # Some error checking to see if our selection contains non-valid addresses
-if (instruction_selection_list[0][:16].isspace() or not instruction_selection_list[0][:16])or\
-	 (instruction_selection_list[-1][:16].isspace() or not instruction_selection_list[-1][:16]):
+if (sanitized_instruction_list[0][:16].isspace() or not sanitized_instruction_list[0][:16])or\
+	 (sanitized_instruction_list[-1][:16].isspace() or not sanitized_instruction_list[-1][:16]):
 	doc.log("The current selection is not correct, please select a proper address range and try again.")
 
 # Select only a single address if we want to mark our current selection as the target.
-elif len(instruction_selection_list) == 1:
+elif len(sanitized_instruction_list) == 1:
 	cursor_at = doc.getCurrentAddress()
 
 	# If our current cursor is already labeled "target" then remove it
@@ -25,8 +32,8 @@ elif len(instruction_selection_list) == 1:
 else:
 
 	# Convert our addresses from raw strings to addresses which can be used with Hoppers API
-	instruction_start = int("0x"+instruction_selection_list[0][:16],16)
-	instruction_end = int("0x"+instruction_selection_list[-1][:16],16)
+	instruction_start = int("0x"+sanitized_instruction_list[0][:16],16)
+	instruction_end = int("0x"+sanitized_instruction_list[-1][:16],16)
 
 	doc.log("Starting Instuction addr is " + hex(instruction_start))
 	doc.log("Ending Instruction addr is " + hex(instruction_end))
@@ -34,7 +41,7 @@ else:
 	final_string = ""
 
 	# Loop through our instruction range
-	for current_instruction_line in instruction_selection_list:
+	for current_instruction_line in sanitized_instruction_list:
 
 		# Some more error checking here in case my top level if fails for some reason
 		if "target" not in current_instruction_line and current_instruction_line:
@@ -66,3 +73,5 @@ else:
 
 	# Print out our pattern string to Hopper's console.
 	doc.log("Final pattern string is:\n" + final_string[:-6])
+
+
